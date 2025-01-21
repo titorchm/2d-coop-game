@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     
     // InputSystem
-    private InputSystem_Actions _inputSystem;
+    [SerializeField] private PlayerInput playerInput;
     
     // Physics
     [SerializeField] private Rigidbody2D rb;
@@ -20,11 +19,6 @@ public class PlayerMovement : MonoBehaviour
     private bool _allowedToDash = true;
     private float _dashTime = .2f;
     private float _dashCooldown = 1f;
-    
-    private void Awake()
-    {
-        _inputSystem = new InputSystem_Actions();
-    }
 
     void Start()
     {
@@ -33,9 +27,9 @@ public class PlayerMovement : MonoBehaviour
             rb = GetComponent<Rigidbody2D>();
         }
         
-        _inputSystem.Player.Enable();
-        _inputSystem.Player.Jump.started += OnPlayerJump;
-        _inputSystem.Player.Dash.started += OnPlayerDash;
+        playerInput.OnMove += OnPlayerMoved;
+        playerInput.OnJump += OnPlayerJump;
+        playerInput.OnDash += OnPlayerDash;
     }
 
     void Update()
@@ -50,11 +44,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        float moveInput = _inputSystem.Player.Move.ReadValue<Vector2>().x;
+        float moveInput = playerInput.GetPlayerMovement().x;
         rb.linearVelocity = new Vector2(moveInput * playerData.moveSpeed, rb.linearVelocity.y);
     }
     
-    private void OnPlayerJump(InputAction.CallbackContext obj)
+    private void OnPlayerMoved(Vector2 inputDirection)
+    {
+        
+        if (inputDirection.x == 1f)
+        {
+            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+        }
+        else if (inputDirection.x == -1f)
+        {
+            transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+        }
+    }
+    
+    private void OnPlayerJump()
     {
         if (IsGrounded())
         {
@@ -62,11 +69,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnPlayerDash(InputAction.CallbackContext obj)
+    private void OnPlayerDash()
     {
         if (_allowedToDash)
         {
-            StartCoroutine(Dash(_inputSystem.Player.Move.ReadValue<Vector2>()));
+            StartCoroutine(Dash(playerInput.GetPlayerMovement().x));
         }
     }
     
@@ -75,13 +82,18 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.Raycast(groundCheck.position, -Vector3.up, 0.1f, groundLayer);
     }
 
-    IEnumerator Dash(Vector2 dashDirection)
+    IEnumerator Dash(float dashDirection)
     {
+        if (dashDirection == 0f)
+        {
+            dashDirection = transform.localScale.x;
+        }
+        
         float gravity = rb.gravityScale;
         
         _allowedToDash = false;
         _isDashing = true;
-        rb.linearVelocity = new Vector2(dashDirection.x * playerData.dashForce, 0);
+        rb.linearVelocity = new Vector2(dashDirection * playerData.dashForce, 0);
         rb.gravityScale = 0f;
         
         yield return new WaitForSeconds(_dashTime);
