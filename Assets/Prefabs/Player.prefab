@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7481241465078352263}
   m_Layer: 0
   m_Name: PlayerObject
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -371,7 +371,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4637133129023216667}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &6162628874128087798
 MonoBehaviour:
   m_ObjectHideFlags: 0

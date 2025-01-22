@@ -5,9 +5,14 @@ public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
 
-    void Start()
+    void OnEnable()
     {
         playerInput.OnInteract += OnPlayerInteract;
+    }
+
+    private void OnDisable()
+    {
+        playerInput.OnInteract -= OnPlayerInteract;
     }
 
     private void OnPlayerInteract()

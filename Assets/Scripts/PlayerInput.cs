@@ -14,9 +14,11 @@ public class PlayerInput : ScriptableObject
     
     private void OnEnable()
     {
-        _inputSystemActions = new InputSystem_Actions();
+        if (_inputSystemActions == null)
+        {
+            _inputSystemActions = new InputSystem_Actions();
+        }
         _inputSystemActions.Enable();
-
         _inputSystemActions.Player.Move.performed += OnPlayerMove;
         _inputSystemActions.Player.Jump.performed += OnPlayerJump;
         _inputSystemActions.Player.Dash.performed += OnPlayerDash;
@@ -26,6 +28,10 @@ public class PlayerInput : ScriptableObject
     private void OnDisable()
     {
         _inputSystemActions.Disable();
+        _inputSystemActions.Player.Move.performed -= OnPlayerMove;
+        _inputSystemActions.Player.Jump.performed -= OnPlayerJump;
+        _inputSystemActions.Player.Dash.performed -= OnPlayerDash;
+        _inputSystemActions.Player.Interact.performed -= OnPlayerInteract;
     }
 
     public void DisableMovement()

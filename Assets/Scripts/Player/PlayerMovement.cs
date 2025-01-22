@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -20,16 +21,26 @@ public class PlayerMovement : MonoBehaviour
     private float _dashTime = .2f;
     private float _dashCooldown = 1f;
 
+    private void OnEnable()
+    {
+        playerInput.OnMove += OnPlayerMoved;
+        playerInput.OnJump += OnPlayerJump;
+        playerInput.OnDash += OnPlayerDash;
+    }
+
+    void OnDisable()
+    {
+        playerInput.OnMove -= OnPlayerMoved;
+        playerInput.OnJump -= OnPlayerJump;
+        playerInput.OnDash -= OnPlayerDash; 
+    }
+
     void Start()
     {
         if (rb == null)
         {
             rb = GetComponent<Rigidbody2D>();
         }
-        
-        playerInput.OnMove += OnPlayerMoved;
-        playerInput.OnJump += OnPlayerJump;
-        playerInput.OnDash += OnPlayerDash;
     }
 
     void Update()
