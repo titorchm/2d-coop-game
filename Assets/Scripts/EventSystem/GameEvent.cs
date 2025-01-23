@@ -4,23 +4,23 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameEvent", menuName = "ScriptableObjects/GameEvent")]
 public class GameEvent : ScriptableObject
 {
-    private List<GameEventListener> listeners = new List<GameEventListener>();
+    private List<GameEventListener> _listeners = new List<GameEventListener>();
 
     public void Raise(Component sender, object data)
     {
-        for (int i = 0; i < listeners.Count; i++)
+        for (int i = 0; i < _listeners.Count; i++)
         {
-            listeners[i].OnEventRaised(sender, data);
+            _listeners[i].OnEventRaised(sender, data);
         }
     }
 
     public void RegisterListener(GameEventListener listener)
     {
-        listeners.Add(listener);
+        _listeners.Add(listener);
     }
 
     public void UnregisterListener(GameEventListener listener)
     {
-        listeners.Remove(listener);
+        _listeners.Remove(listener);
     }
 }

@@ -15,16 +15,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
+    // Shift
+    private bool _isShifting = false;
+    
     // Dash
     private bool _isDashing = false;
     private bool _allowedToDash = true;
-    private float _dashTime = .2f;
-    private float _dashCooldown = 1f;
 
     private void OnEnable()
     {
         playerInput.OnMove += OnPlayerMoved;
         playerInput.OnJump += OnPlayerJump;
+        playerInput.OnShift += OnPlayerShift;
+        playerInput.OnShiftCanceled += OnShiftCanceled;
         playerInput.OnDash += OnPlayerDash;
     }
 
@@ -32,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput.OnMove -= OnPlayerMoved;
         playerInput.OnJump -= OnPlayerJump;
+        playerInput.OnShift += OnPlayerShift;
+        playerInput.OnShiftCanceled -= OnShiftCanceled;
         playerInput.OnDash -= OnPlayerDash; 
     }
 
@@ -49,14 +54,22 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+
+        if (_isShifting)
+        {
+            Move(playerData.shiftSpeed);
+        }
+        else
+        {
+            Move(playerData.moveSpeed);
+        }
         
-        Move();
     }
 
-    private void Move()
+    private void Move(float moveSpeed)
     {
         float moveInput = playerInput.GetPlayerMovement().x;
-        rb.linearVelocity = new Vector2(moveInput * playerData.moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
     }
     
     private void OnPlayerMoved(Vector2 inputDirection)
@@ -64,11 +77,11 @@ public class PlayerMovement : MonoBehaviour
         
         if (inputDirection.x == 1f)
         {
-            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(playerData.playerWidth, transform.localScale.y, transform.localScale.z);
         }
         else if (inputDirection.x == -1f)
         {
-            transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-playerData.playerWidth, transform.localScale.y, transform.localScale.z);
         }
     }
     
@@ -80,11 +93,22 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnPlayerShift()
+    {
+        _isShifting = true;
+    }
+    
+    private void OnShiftCanceled()
+    {
+        _isShifting = false;
+    }
+    
     private void OnPlayerDash()
     {
         if (_allowedToDash)
         {
-            StartCoroutine(Dash(playerInput.GetPlayerMovement().x));
+            
+            //StartCoroutine(Dash(playerInput.GetPlayerMovement().x));
         }
     }
     
@@ -93,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.Raycast(groundCheck.position, -Vector3.up, 0.1f, groundLayer);
     }
 
-    IEnumerator Dash(float dashDirection)
+    /*IEnumerator Dash(float dashDirection)
     {
         if (dashDirection == 0f)
         {
@@ -107,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector2(dashDirection * playerData.dashForce, 0);
         rb.gravityScale = 0f;
         
-        yield return new WaitForSeconds(_dashTime);
+        yield return new WaitForSeconds(playerData.dashTime);
         
         rb.gravityScale = gravity;
         _isDashing = false;
@@ -117,8 +141,8 @@ public class PlayerMovement : MonoBehaviour
         //     _allowedToDash = true;
         // }
         
-        yield return new WaitForSeconds(_dashCooldown);
+        yield return new WaitForSeconds(playerData.dashCooldown);
         
         _allowedToDash = true;
-    }
+    }*/
 }

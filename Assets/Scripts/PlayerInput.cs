@@ -9,6 +9,8 @@ public class PlayerInput : ScriptableObject
     
     public event Action<Vector2> OnMove;
     public event Action OnJump;
+    public event Action OnShift;
+    public event Action OnShiftCanceled;
     public event Action OnDash;
     public event Action OnInteract;
     
@@ -21,6 +23,8 @@ public class PlayerInput : ScriptableObject
         _inputSystemActions.Enable();
         _inputSystemActions.Player.Move.performed += OnPlayerMove;
         _inputSystemActions.Player.Jump.performed += OnPlayerJump;
+        _inputSystemActions.Player.Shift.performed += OnPlayerShift;
+        _inputSystemActions.Player.Shift.canceled += OnPlayerShiftCanceled;
         _inputSystemActions.Player.Dash.performed += OnPlayerDash;
         _inputSystemActions.Player.Interact.performed += OnPlayerInteract;
     }
@@ -30,6 +34,8 @@ public class PlayerInput : ScriptableObject
         _inputSystemActions.Disable();
         _inputSystemActions.Player.Move.performed -= OnPlayerMove;
         _inputSystemActions.Player.Jump.performed -= OnPlayerJump;
+        _inputSystemActions.Player.Shift.performed -= OnPlayerShift;
+        _inputSystemActions.Player.Shift.canceled -= OnPlayerShiftCanceled;
         _inputSystemActions.Player.Dash.performed -= OnPlayerDash;
         _inputSystemActions.Player.Interact.performed -= OnPlayerInteract;
     }
@@ -52,6 +58,15 @@ public class PlayerInput : ScriptableObject
     private void OnPlayerJump(InputAction.CallbackContext ctx)
     {
         OnJump?.Invoke();
+    }
+    
+    private void OnPlayerShift(InputAction.CallbackContext obj)
+    {
+        OnShift?.Invoke();
+    }
+    private void OnPlayerShiftCanceled(InputAction.CallbackContext obj)
+    {
+        OnShiftCanceled?.Invoke();
     }
     
     private void OnPlayerDash(InputAction.CallbackContext ctx)
