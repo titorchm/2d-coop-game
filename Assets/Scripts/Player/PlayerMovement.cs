@@ -17,10 +17,6 @@ public class PlayerMovement : MonoBehaviour
 
     // Shift
     private bool _isShifting = false;
-    
-    // Dash
-    private bool _isDashing = false;
-    private bool _allowedToDash = true;
 
     private void OnEnable()
     {
@@ -28,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
         playerInput.OnJump += OnPlayerJump;
         playerInput.OnShift += OnPlayerShift;
         playerInput.OnShiftCanceled += OnShiftCanceled;
-        playerInput.OnDash += OnPlayerDash;
     }
 
     void OnDisable()
@@ -37,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
         playerInput.OnJump -= OnPlayerJump;
         playerInput.OnShift += OnPlayerShift;
         playerInput.OnShiftCanceled -= OnShiftCanceled;
-        playerInput.OnDash -= OnPlayerDash; 
     }
 
     void Start()
@@ -50,13 +44,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (_isDashing)
-        {
-            return;
-        }
-
         if (_isShifting)
         {
+            if (!IsGrounded())
+            {
+                return;
+            }
             Move(playerData.shiftSpeed);
         }
         else
@@ -103,46 +96,8 @@ public class PlayerMovement : MonoBehaviour
         _isShifting = false;
     }
     
-    private void OnPlayerDash()
-    {
-        if (_allowedToDash)
-        {
-            
-            //StartCoroutine(Dash(playerInput.GetPlayerMovement().x));
-        }
-    }
-    
     private bool IsGrounded()
     {
         return Physics2D.Raycast(groundCheck.position, -Vector3.up, 0.1f, groundLayer);
     }
-
-    /*IEnumerator Dash(float dashDirection)
-    {
-        if (dashDirection == 0f)
-        {
-            dashDirection = transform.localScale.x;
-        }
-        
-        float gravity = rb.gravityScale;
-        
-        _allowedToDash = false;
-        _isDashing = true;
-        rb.linearVelocity = new Vector2(dashDirection * playerData.dashForce, 0);
-        rb.gravityScale = 0f;
-        
-        yield return new WaitForSeconds(playerData.dashTime);
-        
-        rb.gravityScale = gravity;
-        _isDashing = false;
-
-        // if (IsGrounded())
-        // {
-        //     _allowedToDash = true;
-        // }
-        
-        yield return new WaitForSeconds(playerData.dashCooldown);
-        
-        _allowedToDash = true;
-    }*/
 }

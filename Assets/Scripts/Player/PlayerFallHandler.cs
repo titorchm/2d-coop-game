@@ -8,7 +8,7 @@ public class PlayerFallHandler : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            onTrigger.Raise(this, other.transform);
+            onTrigger.Raise(other.transform);
         }
     }
 }

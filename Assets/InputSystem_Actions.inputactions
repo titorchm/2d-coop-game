@@ -69,12 +69,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dash",
+                    "name": "InventoryToggle",
                     "type": "Button",
-                    "id": "ce1a55a8-b5af-45c8-a69f-ad7a49d30d4c",
+                    "id": "7a59b9f6-7272-40b3-b470-59af356da919",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "MultiTap",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -451,23 +451,23 @@
                 },
                 {
                     "name": "",
-                    "id": "180cca27-8c20-46c7-a231-40da5007fae5",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "33ffe6d1-ac51-4bad-a417-303b842d685d",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Shift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01c22b7a-b5da-452e-b4f4-001ae5e1b346",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

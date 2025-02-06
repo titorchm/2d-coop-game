@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    public void RespawnPlayer(Component sender, object data)
+    public void RespawnPlayer(object data)
     {
         if (data is Transform)
         {

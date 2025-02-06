@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed112199586d846cda92e3ef9eaf33ac, type: 3}
   m_Name: Immunity
   m_EditorClassIdentifier: 
-  abilityName: 
-  abilityDescription: 
+  abilityName: Immunity
+  abilityDescription: Grants temporary immunity to all damage. While activated, get
+    the most of it.
   abilityIcon: {fileID: 0}
-  immunityTime: 0.2
-  immunityCooldown: 0.2
+  immunityTime: 10
+  immunityCooldown: 30
