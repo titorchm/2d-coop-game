@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// A class responsible for the session behaviour.
 /// </summary>
 
-public class SessionHandler : MonoBehaviour
+public class SessionHandler : NetworkBehaviour
 {
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private TextMeshProUGUI loadingText;
@@ -19,16 +19,19 @@ public class SessionHandler : MonoBehaviour
     
     public void JoinSession(object role)
     {
+        NetworkManager.NetworkConfig.ConnectionApproval = true;
+        
         loadingScreen.SetActive(true);
         
-        if ((string)role == "Client")
+        if ((ConnectionType)role == ConnectionType.Client)
         {
             NetworkManager.Singleton.StartClient();
         }
-        else if ((string)role == "Host")
+        else if ((ConnectionType)role == ConnectionType.Host)
         {
             NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+            
+            CustomSceneManager.Instance.LoadNetworkScene(SceneNames.MainWorld, LoadSceneMode.Single);
         }
     }
 }

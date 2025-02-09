@@ -26,11 +26,19 @@ public class SessionStartActions : MonoBehaviour
 
     private void StartHost()
     {
-        onPlayerJoin.Raise("Host");
+        Debug.Log("ClickedHost");
+        onPlayerJoin.Raise(ConnectionType.Host);
     }
 
     private void StartClient()
     {
-        onPlayerJoin.Raise("Client");
+        onPlayerJoin.Raise(ConnectionType.Client);
     }
+}
+
+public enum ConnectionType
+{
+    Host,
+    Client,
+    Server
 }
