@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Services;
 
 public class ServerJoin : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ServerJoin : MonoBehaviour
     [SerializeField] private Button joinButton;
 
     [Inject]
-    private SessionService _sessionService;
+    private SessionStartService _sessionService;
     
     private void Awake()
     {

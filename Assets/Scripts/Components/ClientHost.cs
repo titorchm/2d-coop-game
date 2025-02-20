@@ -1,15 +1,14 @@
-using System;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Services;
 
 public class ClientHost : MonoBehaviour
 {
     [SerializeField] private Button startGame;
     
     [Inject]
-    private SessionService _sessionService;
+    private SessionStartService _sessionService;
     
     private void Awake()
     {

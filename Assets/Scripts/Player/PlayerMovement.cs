@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput.OnMove -= OnPlayerMoved;
         playerInput.OnJump -= OnPlayerJump;
-        playerInput.OnShift += OnPlayerShift;
+        playerInput.OnShift -= OnPlayerShift;
         playerInput.OnShiftCanceled -= OnShiftCanceled;
     }
 
@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 return;
             }
+            
             Move(playerData.shiftSpeed);
         }
         else
@@ -67,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
     
     private void OnPlayerMoved(Vector2 inputDirection)
     {
-        
         if (inputDirection.x == 1f)
         {
             transform.localScale = new Vector3(playerData.playerWidth, transform.localScale.y, transform.localScale.z);
