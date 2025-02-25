@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class CustomGameEvent : UnityEvent<object> { }
+public class CustomUnityEvent : UnityEvent<object> { }
 public class GameEventListener : MonoBehaviour
 {
     public GameEvent Event;
-    public CustomGameEvent Response;
+    public CustomUnityEvent Response;
 
     private void OnEnable()
     {

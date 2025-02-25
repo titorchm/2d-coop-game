@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AppearanceData", menuName = "Scriptable Objects/AppearanceData")]
+[CreateAssetMenu(fileName = "AppearanceData", menuName = "ScriptableObjects/AppearanceData")]
 public class AppearanceData : ScriptableObject
 {
     public Sprite[] body;

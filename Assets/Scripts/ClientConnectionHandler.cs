@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Services;
 using UnityEngine;
 using Unity.Netcode;
@@ -11,14 +10,13 @@ public class ClientConnectionHandler : MonoBehaviour
 
     [Inject]
     private PlayerAppearanceService _playerAppearanceService;
-    
-    [SerializeField] private List<uint> alternatePlayerPrefabs;
 
     private void Awake()
     {
         if (m_NetworkManager != null)
         {
             m_NetworkManager.ConnectionApprovalCallback = ApprovalCheck;
+            m_NetworkManager.OnClientConnectedCallback += HandleClientConnected;
         }
     }
 
@@ -30,12 +28,18 @@ public class ClientConnectionHandler : MonoBehaviour
         response.CreatePlayerObject = true;
         response.Position = Vector3.zero;
         
-        PlayerSetAppearanceRpc(appearanceData, request.ClientNetworkId);
+        _playerAppearanceService.AssignPlayerAppearance(appearanceData);
+    }
+    
+    private void HandleClientConnected(ulong clientId)
+    {
+        SetPlayerAppearanceClientRpc(clientId);
     }
 
-    [Rpc(SendTo.Server)]
-    private void PlayerSetAppearanceRpc(byte[] appearanceData, ulong playerId)
+    [Rpc(SendTo.Server, AllowTargetOverride = true)]
+    private void SetPlayerAppearanceClientRpc(ulong clientId)
     {
-        _playerAppearanceService.SetPlayerAppearance(appearanceData, m_NetworkManager.ConnectedClients[playerId].PlayerObject);
+        Debug.Log("SetPlayerAppearance called");
+        _playerAppearanceService.SetPlayerAppearance(clientId);
     }
 }

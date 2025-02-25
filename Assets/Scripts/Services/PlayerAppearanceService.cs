@@ -6,8 +6,9 @@ namespace Services
 {
     public class PlayerAppearanceService
     {
-        [Inject]
-        private AppearanceData _appearanceData;
+        [Inject] private PlayerAppearance _playerAppearance;
+        
+        [Inject] private AppearanceData _appearanceData;
         
         private NetworkManager m_NetworkManager;
         
@@ -17,8 +18,10 @@ namespace Services
             m_NetworkManager = networkManager;
         }
 
-        public void SetPlayerAppearance(byte[] playerAppearance, NetworkObject player)
+        public void SetPlayerAppearance(ulong playerId)
         {
+            NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
+            
             SpriteRenderer[] spriteRenderers = player.GetComponentsInChildren<SpriteRenderer>();
 
             foreach (SpriteRenderer spriteRenderer in spriteRenderers)
@@ -26,16 +29,16 @@ namespace Services
                 switch (spriteRenderer.gameObject.name)
                 {
                     case "Body":
-                        spriteRenderer.sprite = _appearanceData.body[playerAppearance[0]];
+                        spriteRenderer.sprite = _playerAppearance.body;
                         break;
                     case "Face":
-                        spriteRenderer.sprite = _appearanceData.body[playerAppearance[1]];
+                        spriteRenderer.sprite = _playerAppearance.face;
                         break;
                     case "Eyes":
-                        spriteRenderer.sprite = _appearanceData.body[playerAppearance[2]];
+                        spriteRenderer.sprite = _playerAppearance.eyes;
                         break;
                     case "Hat":
-                        spriteRenderer.sprite = _appearanceData.body[playerAppearance[3]];
+                        spriteRenderer.sprite = _playerAppearance.hat;
                         break;
                 }
             }
@@ -48,6 +51,14 @@ namespace Services
             m_NetworkManager.NetworkConfig.ConnectionData[1] = (byte)faceItem;
             m_NetworkManager.NetworkConfig.ConnectionData[2] = (byte)eyesItem;
             m_NetworkManager.NetworkConfig.ConnectionData[3] = (byte)hatItem;
+        }
+
+        public void AssignPlayerAppearance(byte[] payload)
+        {
+            _playerAppearance.body = _appearanceData.body[payload[0]];
+            _playerAppearance.face = _appearanceData.face[payload[1]];
+            _playerAppearance.eyes = _appearanceData.eyes[payload[2]];
+            _playerAppearance.hat = _appearanceData.hat[payload[3]];
         }
     }
 }

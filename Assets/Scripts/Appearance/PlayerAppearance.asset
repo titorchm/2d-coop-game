@@ -9,6 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5857b61540684cf8a15077af198712b, type: 3}
-  m_Name: OnPlayerJoin
+  m_Script: {fileID: 11500000, guid: 4483c3ab9c73d4ea8afed2ce7f5bf15c, type: 3}
+  m_Name: PlayerAppearance
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
+  face: {fileID: 0}
+  eyes: {fileID: 0}
+  hat: {fileID: 0}

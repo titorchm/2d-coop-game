@@ -2,11 +2,11 @@ using Services;
 using UnityEngine;
 using Zenject;
 
-public class TestSetPlayerAppearance : MonoBehaviour
+public class SetPlayerAppearance : MonoBehaviour
 {
-    [Inject] private PlayerAppearanceService _playerAppearanceService;
+    [Inject] PlayerAppearanceService _playerAppearanceService;
     
-     void Start()
+    void Start()
     {
         _playerAppearanceService.SetPlayerAppearancePayload(0,0,0,0);
     }
