@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2259897143863884224}
-  - component: {fileID: 3919654397511408463}
+  - component: {fileID: 17097538315670016}
   - component: {fileID: 3337669621791353219}
   - component: {fileID: 7221346064405631124}
+  - component: {fileID: 6807455315900967010}
   - component: {fileID: 1848578217106746078}
   - component: {fileID: 8951565994759250555}
   - component: {fileID: 7481241465078352263}
@@ -35,12 +36,12 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5862841963253750924}
   - {fileID: 486623239110083375}
+  - {fileID: 5862841963253750924}
   m_Father: {fileID: 555873288188337410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &3919654397511408463
-BoxCollider2D:
+--- !u!70 &17097538315670016
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -74,17 +75,8 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0.065, y: -0.065}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.8, y: 0.94}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.8, y: 0.93}
+  m_Direction: 0
 --- !u!50 &3337669621791353219
 Rigidbody2D:
   serializedVersion: 5
@@ -131,6 +123,19 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &6807455315900967010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463815250184347713}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8af273e3056a3465aa9231949c90c1c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 11400000, guid: 242ad80538f4348a59b707a90594d8c7, type: 2}
 --- !u!114 &1848578217106746078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerMovement: {fileID: 7221346064405631124}
+  playerInteraction: {fileID: 6807455315900967010}
   vc: {fileID: 239600431632693247}
   audioListener: {fileID: 977898999892256440}
 --- !u!114 &8951565994759250555

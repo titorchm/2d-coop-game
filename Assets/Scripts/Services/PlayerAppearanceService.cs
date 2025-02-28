@@ -20,7 +20,14 @@ namespace Services
 
         public void SetPlayerAppearance(ulong playerId)
         {
-            NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
+            if (m_NetworkManager.LocalClient.ClientId != playerId)
+            {
+                return;
+            }
+            
+            //NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
+
+            NetworkObject player = m_NetworkManager.LocalClient.PlayerObject;
             
             SpriteRenderer[] spriteRenderers = player.GetComponentsInChildren<SpriteRenderer>();
 

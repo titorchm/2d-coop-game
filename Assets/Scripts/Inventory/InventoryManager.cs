@@ -30,16 +30,6 @@ public class InventoryManager : MonoBehaviour
     {
         playerInput.OnInventoryToggled += OnInventoryToggled;
     }
-
-    public bool AddItemToInventory(object item)
-    {
-        if (item is Item)
-        {
-            Debug.Log((Item)item);
-        }
-        
-        return false;
-    }
     
     private void OnInventoryToggled()
     {

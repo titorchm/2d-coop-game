@@ -33,11 +33,11 @@ public class ClientConnectionHandler : MonoBehaviour
     
     private void HandleClientConnected(ulong clientId)
     {
-        SetPlayerAppearanceClientRpc(clientId);
+        SetPlayerAppearanceRpc(clientId);
     }
 
     [Rpc(SendTo.Server, AllowTargetOverride = true)]
-    private void SetPlayerAppearanceClientRpc(ulong clientId)
+    private void SetPlayerAppearanceRpc(ulong clientId)
     {
         Debug.Log("SetPlayerAppearance called");
         _playerAppearanceService.SetPlayerAppearance(clientId);
