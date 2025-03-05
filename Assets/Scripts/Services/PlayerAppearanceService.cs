@@ -25,9 +25,7 @@ namespace Services
                 return;
             }
             
-            //NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
-
-            NetworkObject player = m_NetworkManager.LocalClient.PlayerObject;
+            NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
             
             SpriteRenderer[] spriteRenderers = player.GetComponentsInChildren<SpriteRenderer>();
 

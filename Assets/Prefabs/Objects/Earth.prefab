@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7869456814537888181}
   - component: {fileID: 8360914007895562400}
   - component: {fileID: -5602138015019323268}
+  - component: {fileID: 7659909154757624737}
   - component: {fileID: 3143283425956943748}
   m_Layer: 6
   m_Name: Earth
@@ -136,6 +137,31 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.28, y: 1.28}
   m_EdgeRadius: 0
+--- !u!114 &7659909154757624737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3171023613219069531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 76947995
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &3143283425956943748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,8 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6e99fea6149b41b087cfc676a62c222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   blockData: {fileID: 11400000, guid: ec2360d86998f4cc09091322187a51a9, type: 2}
   earthParticles: {fileID: 1185863393872057641}
+  onBlockCollected: {fileID: 11400000, guid: 0ffe666d3accd46a5bf9883e4961bad6, type: 2}
 --- !u!1 &4025319189026494337
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,14 +219,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4025319189026494337}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -266,7 +294,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2

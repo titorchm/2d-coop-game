@@ -36,10 +36,10 @@ public class ClientConnectionHandler : MonoBehaviour
         SetPlayerAppearanceRpc(clientId);
     }
 
-    [Rpc(SendTo.Server, AllowTargetOverride = true)]
+    [Rpc(SendTo.Server)]
     private void SetPlayerAppearanceRpc(ulong clientId)
     {
-        Debug.Log("SetPlayerAppearance called");
+        Debug.Log("Another call to server");
         _playerAppearanceService.SetPlayerAppearance(clientId);
     }
 }

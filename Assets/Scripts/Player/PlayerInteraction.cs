@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerInteraction : MonoBehaviour
+public class PlayerInteraction : NetworkBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
 
@@ -20,6 +21,15 @@ public class PlayerInteraction : MonoBehaviour
         playerInput.OnCollectCanceled -= OnCollectCanceled;
     }
 
+    public void DespawnCollectedObject(object data)
+    {
+        GameObject obj = (GameObject)data;
+        NetworkObject networkObject = obj.GetComponent<NetworkObject>();
+        ulong id = networkObject.NetworkObjectId;
+        
+        DespawnCollectedObjectRpc(id);
+    }
+    
     private void OnPlayerInteract()
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -54,4 +64,18 @@ public class PlayerInteraction : MonoBehaviour
             _lastCollectedBlock.CancelCollect();
         }
     }
+
+    [Rpc(SendTo.Server)]
+    private void DespawnCollectedObjectRpc(ulong objectId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out NetworkObject objectToDespawn))
+        {
+            objectToDespawn.Despawn();
+        }
+        else
+        {
+            Debug.LogWarning($"DespawnCollectedObjectRpc: Object with ID {objectId} not found.");
+        }
+    }
+
 }

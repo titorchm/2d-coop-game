@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3337669621791353219}
   - component: {fileID: 7221346064405631124}
   - component: {fileID: 6807455315900967010}
+  - component: {fileID: 1599647635965528641}
   - component: {fileID: 1848578217106746078}
   - component: {fileID: 8951565994759250555}
   - component: {fileID: 7481241465078352263}
@@ -135,7 +136,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af273e3056a3465aa9231949c90c1c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   playerInput: {fileID: 11400000, guid: 242ad80538f4348a59b707a90594d8c7, type: 2}
+--- !u!114 &1599647635965528641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463815250184347713}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f20be4f8627724d5890f38ca67961df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 0ffe666d3accd46a5bf9883e4961bad6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6807455315900967010}
+        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
+        m_MethodName: DespawnCollectedObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1848578217106746078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +181,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   playerMovement: {fileID: 7221346064405631124}
   playerInteraction: {fileID: 6807455315900967010}
+  eventListener: {fileID: 1599647635965528641}
   vc: {fileID: 239600431632693247}
   audioListener: {fileID: 977898999892256440}
 --- !u!114 &8951565994759250555
