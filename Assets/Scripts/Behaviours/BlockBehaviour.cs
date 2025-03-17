@@ -78,8 +78,6 @@ public class BlockBehaviour : NetworkBehaviour, ICollectable
 
         _spriteRenderer.sprite = null;
         
-        Debug.Log(earthParticles.main.duration - earthParticles.time);
-        
         yield return new WaitForSeconds(earthParticles.main.duration - earthParticles.time);
         
         StopParticlesRpc();

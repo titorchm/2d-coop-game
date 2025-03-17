@@ -10,6 +10,10 @@ public class ClientConnectionHandler : MonoBehaviour
 
     [Inject]
     private PlayerAppearanceService _playerAppearanceService;
+    
+    [SerializeField] private GameEvent onClientConnected;
+    
+    private PlayerAppearanceData _playerAppearance;
 
     private void Awake()
     {
@@ -22,24 +26,24 @@ public class ClientConnectionHandler : MonoBehaviour
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        byte[] appearanceData = request.Payload;
+        _playerAppearance.bodyIndex = request.Payload[0];
+        _playerAppearance.faceIndex = request.Payload[1];
+        _playerAppearance.eyesIndex = request.Payload[2];
+        _playerAppearance.hatIndex = request.Payload[3];
         
         response.Approved = true;
         response.CreatePlayerObject = true;
         response.Position = Vector3.zero;
-        
-        _playerAppearanceService.AssignPlayerAppearance(appearanceData);
     }
     
     private void HandleClientConnected(ulong clientId)
     {
-        SetPlayerAppearanceRpc(clientId);
-    }
-
-    [Rpc(SendTo.Server)]
-    private void SetPlayerAppearanceRpc(ulong clientId)
-    {
-        Debug.Log("Another call to server");
-        _playerAppearanceService.SetPlayerAppearance(clientId);
+        if (!m_NetworkManager.IsServer) return;
+        
+        _playerAppearance.playerId = clientId;
+        
+        _playerAppearanceService.SetPlayerAppearance(_playerAppearance);
+        
+        onClientConnected.Raise(clientId);
     }
 }

@@ -179,9 +179,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  playerMovement: {fileID: 7221346064405631124}
-  playerInteraction: {fileID: 6807455315900967010}
-  eventListener: {fileID: 1599647635965528641}
+  scripts:
+  - {fileID: 7221346064405631124}
+  - {fileID: 6807455315900967010}
+  - {fileID: 1599647635965528641}
   vc: {fileID: 239600431632693247}
   audioListener: {fileID: 977898999892256440}
 --- !u!114 &8951565994759250555

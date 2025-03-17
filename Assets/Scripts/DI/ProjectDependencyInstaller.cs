@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ProjectDependencyInstaller : MonoInstaller
 {
-    [SerializeField] private PlayerAppearance playerAppearance;
-    
     [SerializeField] private AppearanceData appearanceData;
     
     private NetworkManager _networkManager;
@@ -24,7 +22,6 @@ public class ProjectDependencyInstaller : MonoInstaller
         
         // ScriptableObjects
         Container.BindInstance(appearanceData).AsSingle().NonLazy();
-        Container.BindInstance(playerAppearance).AsSingle().NonLazy();
     }
     
 }

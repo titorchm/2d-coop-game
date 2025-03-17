@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -6,8 +8,6 @@ namespace Services
 {
     public class PlayerAppearanceService
     {
-        [Inject] private PlayerAppearance _playerAppearance;
-        
         [Inject] private AppearanceData _appearanceData;
         
         private NetworkManager m_NetworkManager;
@@ -16,37 +16,6 @@ namespace Services
         public PlayerAppearanceService(NetworkManager networkManager)
         {
             m_NetworkManager = networkManager;
-        }
-
-        public void SetPlayerAppearance(ulong playerId)
-        {
-            if (m_NetworkManager.LocalClient.ClientId != playerId)
-            {
-                return;
-            }
-            
-            NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
-            
-            SpriteRenderer[] spriteRenderers = player.GetComponentsInChildren<SpriteRenderer>();
-
-            foreach (SpriteRenderer spriteRenderer in spriteRenderers)
-            {
-                switch (spriteRenderer.gameObject.name)
-                {
-                    case "Body":
-                        spriteRenderer.sprite = _playerAppearance.body;
-                        break;
-                    case "Face":
-                        spriteRenderer.sprite = _playerAppearance.face;
-                        break;
-                    case "Eyes":
-                        spriteRenderer.sprite = _playerAppearance.eyes;
-                        break;
-                    case "Hat":
-                        spriteRenderer.sprite = _playerAppearance.hat;
-                        break;
-                }
-            }
         }
         
         public void SetPlayerAppearancePayload(int bodyItem, int faceItem, int eyesItem, int hatItem)
@@ -57,13 +26,116 @@ namespace Services
             m_NetworkManager.NetworkConfig.ConnectionData[2] = (byte)eyesItem;
             m_NetworkManager.NetworkConfig.ConnectionData[3] = (byte)hatItem;
         }
-
-        public void AssignPlayerAppearance(byte[] payload)
+        
+        public void SetPlayerAppearance(PlayerAppearanceData playerAppearance)
         {
-            _playerAppearance.body = _appearanceData.body[payload[0]];
-            _playerAppearance.face = _appearanceData.face[payload[1]];
-            _playerAppearance.eyes = _appearanceData.eyes[payload[2]];
-            _playerAppearance.hat = _appearanceData.hat[payload[3]];
+            UpdatePlayerAppearances(playerAppearance);
+
+            ulong playerId = playerAppearance.playerId;
+            
+            NetworkList<PlayerAppearanceData> playerAppearances = PlayerAppearanceManager.Instance.PlayerAppearances;
+            
+            NetworkObject player = m_NetworkManager.ConnectedClients[playerId].PlayerObject;
+            
+            SpriteRenderer[] spriteRenderers = player.GetComponentsInChildren<SpriteRenderer>();
+
+            foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+            {
+                switch (spriteRenderer.gameObject.name)
+                {
+                    case "Body":
+                        spriteRenderer.sprite = _appearanceData.body[playerAppearances[(int)playerId].bodyIndex];
+                        break;
+                    case "Face":
+                        spriteRenderer.sprite = _appearanceData.face[playerAppearances[(int)playerId].faceIndex];
+                        break;
+                    case "Eyes":
+                        spriteRenderer.sprite = _appearanceData.eyes[playerAppearances[(int)playerId].eyesIndex];
+                        break;
+                    case "Hat":
+                        spriteRenderer.sprite = _appearanceData.hat[playerAppearances[(int)playerId].hatIndex];
+                        break;
+                }
+            }
         }
+
+         private void UpdatePlayerAppearances(PlayerAppearanceData playerAppearance)
+         {
+             PlayerAppearanceManager.Instance.AddPlayerAppearanceRpc(playerAppearance);
+         }
+        
+        public void SyncPlayerAppearances()
+        {
+            IReadOnlyDictionary<ulong, NetworkClient> playerClients = m_NetworkManager.ConnectedClients;
+            
+            NetworkList<PlayerAppearanceData> playerAppearances = PlayerAppearanceManager.Instance.PlayerAppearances;
+            
+            foreach (var playerClient in playerClients)
+            {
+                NetworkObject playerObject = playerClient.Value.PlayerObject;
+
+                SpriteRenderer[] spriteRenderers = playerObject.GetComponentsInChildren<SpriteRenderer>();
+
+                foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+                {
+                    switch (spriteRenderer.gameObject.name)
+                    {
+                        case "Body":
+                            spriteRenderer.sprite =
+                                _appearanceData.body[playerAppearances[(int)playerClient.Key].bodyIndex];
+                            break;
+                        case "Face":
+                            spriteRenderer.sprite =
+                                _appearanceData.face[playerAppearances[(int)playerClient.Key].faceIndex];
+                            break;
+                        case "Eyes":
+                            spriteRenderer.sprite =
+                                _appearanceData.eyes[playerAppearances[(int)playerClient.Key].eyesIndex];
+                            break;
+                        case "Hat":
+                            spriteRenderer.sprite =
+                                _appearanceData.hat[playerAppearances[(int)playerClient.Key].hatIndex];
+                            break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+public struct PlayerAppearanceData : INetworkSerializable, IEquatable<PlayerAppearanceData>
+{
+    public ulong playerId;
+    public int bodyIndex;
+    public int faceIndex;
+    public int eyesIndex;
+    public int hatIndex;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref playerId);
+        serializer.SerializeValue(ref bodyIndex);
+        serializer.SerializeValue(ref faceIndex);
+        serializer.SerializeValue(ref eyesIndex);
+        serializer.SerializeValue(ref hatIndex);
+    }
+
+    public bool Equals(PlayerAppearanceData other)
+    {
+        return playerId == other.playerId &&
+               bodyIndex == other.bodyIndex &&
+               faceIndex == other.faceIndex &&
+               eyesIndex == other.eyesIndex &&
+               hatIndex == other.hatIndex;
+    }
+    
+    public override bool Equals(object obj)
+    {
+        return obj is PlayerAppearanceData other && Equals(other);
+    }
+    
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(playerId, bodyIndex, faceIndex, eyesIndex, hatIndex);
     }
 }

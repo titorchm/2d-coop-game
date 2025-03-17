@@ -20,6 +20,7 @@ namespace Services
         public void HostGame()
         {
             m_NetworkManager.StartHost();
+            
             _sceneService.LoadNetworkScene(SceneNames.MainWorld, LoadSceneMode.Single);
         }
     

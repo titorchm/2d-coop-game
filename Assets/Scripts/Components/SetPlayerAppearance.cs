@@ -1,4 +1,3 @@
-using System;
 using Services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,10 +17,13 @@ public class SetPlayerAppearance : MonoBehaviour
     private float faceValue;
     private float hatValue;
     
-    void Awake()
+    void Start()
     {
         _playerAppearanceService.SetPlayerAppearancePayload(0,0,0,0);
-        
+    }
+
+    private void OnEnable()
+    {
         bodySlider.onValueChanged.AddListener(SetBodyValue);
         eyesSlider.onValueChanged.AddListener(SetEyesValue);
         faceSlider.onValueChanged.AddListener(SetFaceValue);
@@ -43,7 +45,7 @@ public class SetPlayerAppearance : MonoBehaviour
             (int)face,
             (int)eyes,
             (int)hat
-            );
+        );
     }
 
     private void SetBodyValue(float body)

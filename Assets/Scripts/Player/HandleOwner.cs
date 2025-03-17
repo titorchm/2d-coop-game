@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class HandleOwner : NetworkBehaviour
 {
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private PlayerInteraction playerInteraction;
-    [SerializeField] private GameEventListener eventListener;
+    [SerializeField] private MonoBehaviour[] scripts;
     [SerializeField] private CinemachineVirtualCameraBase vc;
     [SerializeField] private AudioListener audioListener;
     
@@ -16,10 +14,12 @@ public class HandleOwner : NetworkBehaviour
 
         if (IsOwner)
         {
+            foreach (var script in scripts)
+            {
+                script.enabled = true;
+            }
+            
             vc.Priority = 1;
-            playerMovement.enabled = true;
-            playerInteraction.enabled = true;
-            eventListener.enabled = true;
             audioListener.enabled = true;
         }
     }

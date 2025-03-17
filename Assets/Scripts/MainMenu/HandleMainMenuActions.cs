@@ -9,8 +9,6 @@ public class HandleMainMenuActions : MonoBehaviour
 
     public void HandleMenuAction(object menuAction)
     {
-        Debug.Log(menuAction);
-        
         switch ((MenuActions)menuAction)
         {
             case MenuActions.SinglePlayer:
