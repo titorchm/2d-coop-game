@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!IsGrounded())
             {
-                return;
+               // return;
             }
             
             Move(playerData.shiftSpeed);

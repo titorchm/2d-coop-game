@@ -128,14 +128,4 @@ public struct PlayerAppearanceData : INetworkSerializable, IEquatable<PlayerAppe
                eyesIndex == other.eyesIndex &&
                hatIndex == other.hatIndex;
     }
-    
-    public override bool Equals(object obj)
-    {
-        return obj is PlayerAppearanceData other && Equals(other);
-    }
-    
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(playerId, bodyIndex, faceIndex, eyesIndex, hatIndex);
-    }
 }

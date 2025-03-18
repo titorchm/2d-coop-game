@@ -44,6 +44,7 @@ public class ClientConnectionHandler : MonoBehaviour
         
         _playerAppearanceService.SetPlayerAppearance(_playerAppearance);
         
+        // custom event (scriptable object)
         onClientConnected.Raise(clientId);
     }
 }

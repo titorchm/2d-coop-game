@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Services;
 using Unity.Netcode;
-using UnityEngine;
 using Zenject;
 
 public class PlayerAppearanceManager : NetworkBehaviour
@@ -31,21 +28,23 @@ public class PlayerAppearanceManager : NetworkBehaviour
     public void AddPlayerAppearanceRpc(PlayerAppearanceData playerAppearance)
     {
         PlayerAppearances.Add(playerAppearance);
-
-        StartCoroutine(SyncPlayerAppearances());
-    }
-
-    IEnumerator SyncPlayerAppearances()
-    {
-        // wait for .1 second to fully sync the count
-        yield return new WaitForSeconds(0.1f);
         
         SyncPlayerAppearancesRpc();
+    }
+    
+    IEnumerator SyncPlayerAppearances()
+    {
+        while (PlayerAppearances.Count != NetworkManager.ConnectedClients.Count)
+        {
+            yield return null;
+        }
+        
+        _playerAppearanceService.SyncPlayerAppearances();
     }
 
     [Rpc(SendTo.Everyone)]
     private void SyncPlayerAppearancesRpc()
     {
-        _playerAppearanceService.SyncPlayerAppearances();
+        StartCoroutine(SyncPlayerAppearances());
     }
 }

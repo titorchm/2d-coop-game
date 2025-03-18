@@ -1,25 +1,31 @@
 using System.Collections;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public interface ICollectable
 {
+    IItem Item { get; }
+    
     public void Collect();
     public void CancelCollect();
 }
 
 public interface IInteractable
 {
+    // leave as is, just not implemented anywhere
     public void Interact();
 }
 
 public class BlockBehaviour : NetworkBehaviour, ICollectable
 {
     public BlockData blockData;
+
+    public IItem Item => blockData;
     
     [SerializeField] private ParticleSystem earthParticles;
     
-    [SerializeField] private GameEvent onBlockCollected;
+    [SerializeField] private GameEvent onItemCollected;
     
     private SpriteRenderer _spriteRenderer;
     
@@ -28,7 +34,7 @@ public class BlockBehaviour : NetworkBehaviour, ICollectable
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = blockData.Sprite;
+        _spriteRenderer.sprite = Item.Sprite;
     }
     
     //[Rpc(SendTo.Server)]
@@ -90,6 +96,6 @@ public class BlockBehaviour : NetworkBehaviour, ICollectable
     [Rpc(SendTo.Server)]
     private void SendEventRpc()
     {
-        onBlockCollected.Raise(gameObject);
+        onItemCollected.Raise(gameObject);
     }
 }

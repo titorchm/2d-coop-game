@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using ModestTree;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -15,10 +17,12 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private RectTransform inventorySlots;
     [SerializeField] private RectTransform activeWeapons;
 
-    private bool _inventoryOpen = false;
-    private float inventoryToggleDuration = .5f;
+    private List<IItem> _itemSlots = new();
     
-    private Coroutine inventoryToggleCoroutine;
+    private bool _inventoryOpen = false;
+    private float _inventoryToggleDuration = .5f;
+    
+    private Coroutine _inventoryToggleCoroutine;
 
     private void Awake()
     {
@@ -30,19 +34,28 @@ public class InventoryManager : MonoBehaviour
     {
         playerInput.OnInventoryToggled += OnInventoryToggled;
     }
+
+    public void AddToInventory(object data)
+    {
+        var go = (GameObject)data;
+        
+        var collectable = go.GetComponent<ICollectable>();
+        
+        UpdateInventorySlots(collectable.Item);
+    }
     
     private void OnInventoryToggled()
     {
-        if (inventoryToggleCoroutine != null)
+        if (_inventoryToggleCoroutine != null)
         {
-            StopCoroutine(inventoryToggleCoroutine);
+            StopCoroutine(_inventoryToggleCoroutine);
         }
         
         if (!_inventoryOpen)
         {
             _inventoryOpen = true;
             
-            inventoryToggleCoroutine = StartCoroutine(ToggleInventory(
+            _inventoryToggleCoroutine = StartCoroutine(ToggleInventory(
                 new Vector2(INVENTORY_SLOTS_START_POSITION_X, INVENTORY_SLOTS_START_POSITION_Y),
                 new Vector2(ACTIVE_WEAPONS_START_POSITION_X, ACTIVE_WEAPONS_START_POSITION_Y)
             ));
@@ -51,7 +64,7 @@ public class InventoryManager : MonoBehaviour
         {
             _inventoryOpen = false;
             
-            inventoryToggleCoroutine = StartCoroutine(ToggleInventory(
+            _inventoryToggleCoroutine = StartCoroutine(ToggleInventory(
                 new Vector2(INVENTORY_SLOTS_START_POSITION_X * 2, INVENTORY_SLOTS_START_POSITION_Y),
                 new Vector2(ACTIVE_WEAPONS_START_POSITION_X * 2, ACTIVE_WEAPONS_START_POSITION_Y)
             ));
@@ -65,10 +78,10 @@ public class InventoryManager : MonoBehaviour
         Vector2 startIS = inventorySlots.anchoredPosition;
         Vector2 startAW = activeWeapons.anchoredPosition;
 
-        while (elapsedTime < inventoryToggleDuration)
+        while (elapsedTime < _inventoryToggleDuration)
         {
-            inventorySlots.anchoredPosition = Vector2.Lerp(startIS, targetPositionIS, EaseOutCubic(elapsedTime) / inventoryToggleDuration);
-            activeWeapons.anchoredPosition = Vector2.Lerp(startAW, targetPositionAW, EaseOutCubic(elapsedTime) / inventoryToggleDuration);
+            inventorySlots.anchoredPosition = Vector2.Lerp(startIS, targetPositionIS, EaseOutCubic(elapsedTime) / _inventoryToggleDuration);
+            activeWeapons.anchoredPosition = Vector2.Lerp(startAW, targetPositionAW, EaseOutCubic(elapsedTime) / _inventoryToggleDuration);
 
             elapsedTime += Time.deltaTime;
 
@@ -82,5 +95,12 @@ public class InventoryManager : MonoBehaviour
     private float EaseOutCubic(float x)
     {
         return -(MathF.Cos(MathF.PI * x) - 1) / 2;
+    }
+
+    private void UpdateInventorySlots(IItem item)
+    {
+        _itemSlots.Add(item);
+        
+        Debug.Log(item.Name + " added to Inventory");
     }
 }
